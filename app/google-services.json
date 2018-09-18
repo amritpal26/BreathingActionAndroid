@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "735679182709",
+    "firebase_url": "https://breathingaction-dee2c.firebaseio.com",
+    "project_id": "breathingaction-dee2c",
+    "storage_bucket": "breathingaction-dee2c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735679182709:android:4f823795ce9b923f",
+        "android_client_info": {
+          "package_name": "com.example.amrit.breathingaction"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735679182709-5qjot3r62vf70g866f6niuvcgqhvcmqe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.amrit.breathingaction",
+            "certificate_hash": "d0c09f6563c5b623768f322c35d0ea0f8838e9a0"
+          }
+        },
+        {
+          "client_id": "735679182709-gni7inkmk4mtvk2ebin3siim2mgndlaf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5laDKUS4fx622wp6CxU9oZVXp5_nt1BQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "735679182709-gni7inkmk4mtvk2ebin3siim2mgndlaf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
