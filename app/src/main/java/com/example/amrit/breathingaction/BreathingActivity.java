@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -121,7 +122,6 @@ public class BreathingActivity extends AppCompatActivity {
         setupSpinner(R.id.holdSpinner2);
         setupSpinner(R.id.timerSpinner);
         setupStartClick();
-
     }
 
     @Override
@@ -456,9 +456,21 @@ public class BreathingActivity extends AppCompatActivity {
     private void sendTimeStampToDataBase(){
         DatabaseReference myRef = database.getReference("users");
         Date date = new Date();
-        SimpleDateFormat f = new SimpleDateFormat("EE MMM dd, yyyy hh:mm:ss a");
-        String dateString = f.format(date);
-        myRef.child(userName).push().setValue(dateString);
+        SimpleDateFormat dateF = new SimpleDateFormat("EE MMM dd, yyyy");
+        SimpleDateFormat timeF = new SimpleDateFormat("hh:mm:ss a");
+        String inhale = ((double) inhaleTimeMillis / 1000) + "";
+        String hold1 = ((double) hold_1_TimeMillis / 1000) + "";
+        String exhale = ((double) exhaleTimeMillis / 1000) + "";
+        String hold2 = ((double) hold_2_TimeMillis / 1000) + "";
+
+        String dateString = dateF.format(date);
+        String timeString = timeF.format(date);
+
+        myRef.child(userName).child(dateString).child(timeString).child("inhale").setValue(inhale);
+        myRef.child(userName).child(dateString).child(timeString).child("hold 1").setValue(hold1);
+        myRef.child(userName).child(dateString).child(timeString).child("exhale").setValue(exhale);
+        myRef.child(userName).child(dateString).child(timeString).child("hold 2").setValue(hold2);
+//        myRef.child(userName).push().setValue(dateString);
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.amrit.breathingaction;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -11,28 +12,30 @@ import android.util.Log;
 
 public class ReminderReceiver extends BroadcastReceiver {
 
-    private final int REQUEST_CODE_REMINDER_1 = 100;
-    private final int REQUEST_CODE_REMINDER_2 = 200;
-    private final String CHANNEL_ID = "Reminders";
+    public static String NOTIFICATION_ID_EXTRA = "notification-id";
+    public static String NOTIFICATION_EXTRA = "notification";
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        Log.i("Broadcast", "recieved");
 
-        Intent notification_intent = new Intent(context, BreathingActivity.class);
-        notification_intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, REQUEST_CODE_REMINDER_1, notification_intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setContentTitle("Reminder")
-                .setContentText("Remember to do the breathing exercise")
-                .setContentIntent(pendingIntent)
-                .setSmallIcon(android.R.drawable.alert_light_frame)
-                .setAutoCancel(true);
+    public void onReceive(Context context, Intent intent){
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(REQUEST_CODE_REMINDER_1, builder.build());
+        int notificationId = intent.getIntExtra(NOTIFICATION_ID_EXTRA, 0);
+        Notification notification = createNotification(context, notificationId);
+        notificationManager.notify(notificationId, notification);
+    }
+
+    private Notification createNotification(Context context, int notificationId){
+        Intent intent = new Intent(context, BreathingActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,intent, 0);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, App.CHANNEL_ID)
+                .setContentTitle("Reminder")
+                .setContentText("Remember to perform the breathing exercise.")
+                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        return builder.build();
     }
 }
