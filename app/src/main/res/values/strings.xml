@@ -1,8 +1,6 @@
 <resources>
-    <string name="app_name">Breathing Action</string>
+    <string name="app_name">Breathing Action</string>x
 
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
     <string name="tab_text_3">Tab 3</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
@@ -29,12 +27,12 @@
     <string name="pref_header_general">General</string>
 
     <string name="pref_title_user_name">User name</string>
-    <string name="pref_default_display_name">user name</string>
+    <string name="pref_default_display_name">default</string>
 
     <string name="pref_title_sound">Enable Sound</string>
     <string name="pref_description_sound">Enable or disable sound</string>
 
-    <string name="pref_title_vibration">Enable Sound</string>
+    <string name="pref_title_vibration">Enable Vibration</string>
     <string name="pref_description_vibration">Enable or disable vibration</string>
 
     <!-- Example settings for Data & Sync -->

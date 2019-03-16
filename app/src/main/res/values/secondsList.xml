@@ -1,40 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer-array name="secondsListContinous">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
+    <integer-array name="secondsListInhale">
         <item>6</item>
         <item>7</item>
         <item>8</item>
         <item>9</item>
         <item>10</item>
-        <item>12</item>
-        <item>14</item>
-        <item>16</item>
-        <item>18</item>
-        <item>20</item>
     </integer-array>
 
-    <integer-array name="secondsListContinousHold">
+    <integer-array name="secondsListExhale">
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+
+    </integer-array>
+
+    <integer-array name="secondsListHold">
         <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
         <item>6</item>
         <item>7</item>
         <item>8</item>
         <item>9</item>
         <item>10</item>
+        <item>11</item>
         <item>12</item>
+        <item>13</item>
         <item>14</item>
-        <item>16</item>
-        <item>18</item>
-        <item>20</item>
     </integer-array>
 
     <integer-array name="secondsListTimer">
@@ -57,19 +52,6 @@
         <item>255</item>
         <item>270</item>
         <item>285</item>
-        <item>300</item>
-    </integer-array>
-
-    <integer-array name="secondsListTimer2">
-        <item>30</item>
-        <item>60</item>
-        <item>90</item>
-        <item>120</item>
-        <item>150</item>
-        <item>180</item>
-        <item>210</item>
-        <item>240</item>
-        <item>270</item>
         <item>300</item>
     </integer-array>
 

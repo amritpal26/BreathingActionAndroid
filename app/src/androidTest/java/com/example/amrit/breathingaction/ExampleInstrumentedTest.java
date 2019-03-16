@@ -1,4 +1,4 @@
-package com.example.amrit.breathingaction;
+package com.sfu.research.breathingaction;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.amrit.breathingaction", appContext.getPackageName());
+        assertEquals("com.example.amrit.com.sfu.research.breathingaction", appContext.getPackageName());
     }
 }

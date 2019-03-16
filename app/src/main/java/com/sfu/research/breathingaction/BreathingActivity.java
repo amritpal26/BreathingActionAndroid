@@ -1,4 +1,4 @@
-package com.example.amrit.breathingaction;
+package com.sfu.research.breathingaction;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,31 +7,23 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.nex3z.expandablecircleview.ExpandableCircleView;
 
 import java.util.ArrayList;
@@ -91,14 +83,14 @@ public class BreathingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_breathing);
+        setContentView(com.sfu.research.breathingaction.R.layout.activity_breathing);
 
-        timerProgressBar = (MaterialProgressBar) findViewById(R.id.timerActivityProgressBar);
-        currentActionProgress = (ExpandableCircleView) findViewById(R.id.currentActionProgressBar);
+        timerProgressBar = (MaterialProgressBar) findViewById(com.sfu.research.breathingaction.R.id.timerActivityProgressBar);
+        currentActionProgress = (ExpandableCircleView) findViewById(com.sfu.research.breathingaction.R.id.currentActionProgressBar);
         currentActionProgress.setExpandAnimationDuration(EXPAND_DURATION);
 
-        final TextView commandTextView = (TextView) findViewById(R.id.breathingActionCommandTextView);
-        final TextView actionTimerTextView = (TextView) findViewById(R.id.breathingActionTime);
+        final TextView commandTextView = (TextView) findViewById(com.sfu.research.breathingaction.R.id.breathingActionCommandTextView);
+        final TextView actionTimerTextView = (TextView) findViewById(com.sfu.research.breathingaction.R.id.breathingActionTime);
         commandTextView.bringToFront();
         actionTimerTextView.bringToFront();
 
@@ -114,13 +106,15 @@ public class BreathingActivity extends AppCompatActivity {
         Long time = defaultPrefs.getLong("timePref_reminder_1", 0);
         Log.i("timePref_reminder_1", DateFormat.getTimeFormat(this).format(new Date(time)));
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         initiateDatabase();
 
-        setupSpinner(R.id.inhaleSpinner);
-        setupSpinner(R.id.exhaleSpinner);
-        setupSpinner(R.id.holdSpinner);
-        setupSpinner(R.id.holdSpinner2);
-        setupSpinner(R.id.timerSpinner);
+        setupSpinner(com.sfu.research.breathingaction.R.id.inhaleSpinner);
+        setupSpinner(com.sfu.research.breathingaction.R.id.exhaleSpinner);
+        setupSpinner(com.sfu.research.breathingaction.R.id.holdSpinner);
+        setupSpinner(com.sfu.research.breathingaction.R.id.holdSpinner2);
+        setupSpinner(com.sfu.research.breathingaction.R.id.timerSpinner);
         setupStartClick();
     }
 
@@ -131,8 +125,8 @@ public class BreathingActivity extends AppCompatActivity {
     }
 
     private void setupStartClick() {
-        final TextView commandTextView = (TextView) findViewById(R.id.breathingActionCommandTextView);
-        final TextView actionTimerTextView = (TextView) findViewById(R.id.breathingActionTime);
+        final TextView commandTextView = (TextView) findViewById(com.sfu.research.breathingaction.R.id.breathingActionCommandTextView);
+        final TextView actionTimerTextView = (TextView) findViewById(com.sfu.research.breathingaction.R.id.breathingActionTime);
 
         commandTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,18 +152,17 @@ public class BreathingActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(com.sfu.research.breathingaction.R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings){
+        if (item.getItemId() == com.sfu.research.breathingaction.R.id.action_settings){
             Intent intent = SettingsActivity.makeIntent(BreathingActivity.this);
             startActivity(intent);
         }
@@ -177,24 +170,41 @@ public class BreathingActivity extends AppCompatActivity {
     }
 
     private void pauseTimer() {
-        final TextView commandTextView = (TextView) findViewById(R.id.breathingActionCommandTextView);
-        final TextView actionTimerTextView = (TextView) findViewById(R.id.breathingActionTime);
+        final TextView commandTextView = (TextView) findViewById(com.sfu.research.breathingaction.R.id.breathingActionCommandTextView);
+        final TextView actionTimerTextView = (TextView) findViewById(com.sfu.research.breathingaction.R.id.breathingActionTime);
         breathingState = BreathingState.PAUSED;
         actionTimerTextView.setText("Restart");
         commandTextView.setText("Continue");
         previousTimerTimeMillis += currentRunMillisElapsed;
         unlockSpinners();
         timer.cancel();
+
+        actionTimerTextView.setBackground(getDrawable(R.drawable.timer_buttons_continue));
+        commandTextView.setBackground(getDrawable(R.drawable.timer_buttons_restart));
+
+        currentActionProgress.setAlpha(0.4f);
+        timerProgressBar.setAlpha(0.4f);
     }
 
     private void startTimer(final long currentTimerMillis) {
         lockSpinners();
-        inhaleTimeMillis = getTimeFromSpinnerMillis(R.id.inhaleSpinner);
+        currentActionProgress.setAlpha(1f);
+        timerProgressBar.setAlpha(1f);
+        final TextView actionCommandTextView = (TextView) findViewById(com.sfu.research.breathingaction.R.id.breathingActionCommandTextView);
+        final TextView actionTimerTextView = (TextView) findViewById(com.sfu.research.breathingaction.R.id.breathingActionTime);
+        final TextView clockTextView = (TextView) findViewById(com.sfu.research.breathingaction.R.id.clockTextView);
+        actionTimerTextView.setVisibility(View.VISIBLE);
+        actionTimerTextView.setBackground(getDrawable(R.drawable.timer_buttons_continue));
+        actionCommandTextView.setBackgroundResource(0);
+        actionTimerTextView.setBackgroundResource(0);
+
+
+        inhaleTimeMillis = getTimeFromSpinnerMillis(com.sfu.research.breathingaction.R.id.inhaleSpinner);
         Log.i("MSG", inhaleTimeMillis + "");
-        hold_1_TimeMillis = getTimeFromSpinnerMillis(R.id.holdSpinner);
-        exhaleTimeMillis = getTimeFromSpinnerMillis(R.id.exhaleSpinner);
-        hold_2_TimeMillis = getTimeFromSpinnerMillis(R.id.holdSpinner2);
-        timerTimeOnSpinnerMillis = getTimeFromSpinnerMillis(R.id.timerSpinner);
+        hold_1_TimeMillis = getTimeFromSpinnerMillis(com.sfu.research.breathingaction.R.id.holdSpinner);
+        exhaleTimeMillis = getTimeFromSpinnerMillis(com.sfu.research.breathingaction.R.id.exhaleSpinner);
+        hold_2_TimeMillis = getTimeFromSpinnerMillis(com.sfu.research.breathingaction.R.id.holdSpinner2);
+        timerTimeOnSpinnerMillis = getTimeFromSpinnerMillis(com.sfu.research.breathingaction.R.id.timerSpinner);
 
         final long inhaleTimeRangeMillis = inhaleTimeMillis;
         final long hold_1_TimeRangeMillis = inhaleTimeMillis + hold_1_TimeMillis;
@@ -206,11 +216,6 @@ public class BreathingActivity extends AppCompatActivity {
         timerTimeMillis = numberOfCycles * cycleTimeMillis;
 
         timerProgressBar.setMax((int) timerTimeMillis);
-
-        final TextView actionCommandTextView = (TextView) findViewById(R.id.breathingActionCommandTextView);
-        final TextView actionTimerTextView = (TextView) findViewById(R.id.breathingActionTime);
-        final TextView clockTextView = (TextView) findViewById(R.id.clockTextView);
-        actionTimerTextView.setVisibility(View.VISIBLE);
 
         timer = new CountDownTimer((timerTimeMillis) - previousTimerTimeMillis, 10) {
             @Override
@@ -310,10 +315,8 @@ public class BreathingActivity extends AppCompatActivity {
 
     private void setupSpinner(int spinnerId) {
         Spinner spinner = (Spinner) findViewById(spinnerId);
-        final TextView actionCommandTextView = (TextView) findViewById(R.id.breathingActionCommandTextView);
-        final TextView actionTimerTextView = (TextView) findViewById(R.id.breathingActionTime);
-
-//        Toast.makeText(getActivity(), "" + prefs.getInt(INHALE_SELECTED_ITEM, 0), Toast.LENGTH_SHORT).show();
+        final TextView actionCommandTextView = (TextView) findViewById(com.sfu.research.breathingaction.R.id.breathingActionCommandTextView);
+        final TextView actionTimerTextView = (TextView) findViewById(com.sfu.research.breathingaction.R.id.breathingActionTime);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -332,39 +335,51 @@ public class BreathingActivity extends AppCompatActivity {
         });
 
         ArrayList<String> stringSecondsList = new ArrayList<String>();
-        if (spinnerId != R.id.timerSpinner) {
-            if (spinnerId == R.id.exhaleSpinner || spinnerId == R.id.inhaleSpinner) {
-                int[] intSecondsList = getResources().getIntArray(R.array.secondsListContinous);
+        if (spinnerId != com.sfu.research.breathingaction.R.id.timerSpinner) {
+            if (spinnerId == com.sfu.research.breathingaction.R.id.inhaleSpinner) {
+                int[] intSecondsList = getResources().getIntArray(R.array.secondsListInhale);
                 for (int i = 0; i < intSecondsList.length; i++) {
                     stringSecondsList.add((float) intSecondsList[i] / 2 + " sec");
                 }
-                ArrayAdapter adapter = new ArrayAdapter(this, R.layout.drop_down_layout, stringSecondsList);
+                ArrayAdapter adapter = new ArrayAdapter(this, com.sfu.research.breathingaction.R.layout.drop_down_layout, stringSecondsList);
                 spinner.setAdapter(adapter);
-                if (spinnerId == R.id.inhaleSpinner) {
+                if (spinnerId == com.sfu.research.breathingaction.R.id.inhaleSpinner) {
                     spinner.setSelection(prefs.getInt(INHALE_SELECTED_ITEM, 0));
                 } else {
                     spinner.setSelection(prefs.getInt(EXHALE_SELECTED_ITEM, 0));
                 }
-            } else {
-                int[] intSecondsList = getResources().getIntArray(R.array.secondsListContinousHold);
+            }else if(spinnerId == R.id.exhaleSpinner){
+                int[] intSecondsList = getResources().getIntArray(R.array.secondsListExhale);
                 for (int i = 0; i < intSecondsList.length; i++) {
                     stringSecondsList.add((float) intSecondsList[i] / 2 + " sec");
                 }
-                ArrayAdapter adapter = new ArrayAdapter(this, R.layout.drop_down_layout, stringSecondsList);
+                ArrayAdapter adapter = new ArrayAdapter(this, com.sfu.research.breathingaction.R.layout.drop_down_layout, stringSecondsList);
                 spinner.setAdapter(adapter);
-                if (spinnerId == R.id.holdSpinner) {
+                if (spinnerId == com.sfu.research.breathingaction.R.id.inhaleSpinner) {
+                    spinner.setSelection(prefs.getInt(INHALE_SELECTED_ITEM, 0));
+                } else {
+                    spinner.setSelection(prefs.getInt(EXHALE_SELECTED_ITEM, 0));
+                }
+            }else {
+                int[] intSecondsList = getResources().getIntArray(com.sfu.research.breathingaction.R.array.secondsListHold);
+                for (int i = 0; i < intSecondsList.length; i++) {
+                    stringSecondsList.add((float) intSecondsList[i] / 2 + " sec");
+                }
+                ArrayAdapter adapter = new ArrayAdapter(this, com.sfu.research.breathingaction.R.layout.drop_down_layout, stringSecondsList);
+                spinner.setAdapter(adapter);
+                if (spinnerId == com.sfu.research.breathingaction.R.id.holdSpinner) {
                     spinner.setSelection(prefs.getInt(HOLD1_SELECTED_ITEM, 0));
                 } else {
                     spinner.setSelection(prefs.getInt(HOLD2_SELECTED_ITEM, 0));
                 }
             }
         } else {
-            int[] intSecondsList = getResources().getIntArray(R.array.secondsListTimer);
+            int[] intSecondsList = getResources().getIntArray(com.sfu.research.breathingaction.R.array.secondsListTimer);
             for (int i = 0; i < intSecondsList.length; i++) {
                 String timerString = getTimeMinutesString(intSecondsList[i]);
                 stringSecondsList.add(timerString);
             }
-            ArrayAdapter adapter = new ArrayAdapter(this, R.layout.drop_down_layout, stringSecondsList);
+            ArrayAdapter adapter = new ArrayAdapter(this, com.sfu.research.breathingaction.R.layout.drop_down_layout, stringSecondsList);
             spinner.setAdapter(adapter);
             spinner.setSelection(prefs.getInt(TIMER_SELECTED_ITEM, 0));
         }
@@ -375,15 +390,19 @@ public class BreathingActivity extends AppCompatActivity {
         long timeOnSpinnerMillis;
         int positionOfItemSelected = spinner.getSelectedItemPosition();
 
-        if (spinnerId == R.id.timerSpinner) {
-            timeOnSpinnerMillis = getResources().getIntArray(R.array.secondsListTimer)[positionOfItemSelected];
+        if (spinnerId == com.sfu.research.breathingaction.R.id.timerSpinner) {
+            timeOnSpinnerMillis = getResources().getIntArray(com.sfu.research.breathingaction.R.array.secondsListTimer)[positionOfItemSelected];
             timeOnSpinnerMillis = timeOnSpinnerMillis * 1000;
-        } else if (spinnerId == R.id.inhaleSpinner || spinnerId == R.id.exhaleSpinner) {
-            timeOnSpinnerMillis = getResources().getIntArray(R.array.secondsListContinous)[positionOfItemSelected];
+        } else if (spinnerId == com.sfu.research.breathingaction.R.id.inhaleSpinner) {
+            timeOnSpinnerMillis = getResources().getIntArray(R.array.secondsListInhale)[positionOfItemSelected];
             timeOnSpinnerMillis = timeOnSpinnerMillis * 1000;
             timeOnSpinnerMillis = timeOnSpinnerMillis / 2;
-        } else {
-            timeOnSpinnerMillis = getResources().getIntArray(R.array.secondsListContinousHold)[positionOfItemSelected];
+        } else if(spinnerId == com.sfu.research.breathingaction.R.id.exhaleSpinner){
+            timeOnSpinnerMillis = getResources().getIntArray(R.array.secondsListExhale)[positionOfItemSelected];
+            timeOnSpinnerMillis = timeOnSpinnerMillis * 1000;
+            timeOnSpinnerMillis = timeOnSpinnerMillis / 2;
+        }else {
+            timeOnSpinnerMillis = getResources().getIntArray(com.sfu.research.breathingaction.R.array.secondsListHold)[positionOfItemSelected];
             timeOnSpinnerMillis = timeOnSpinnerMillis * 1000;
             timeOnSpinnerMillis = timeOnSpinnerMillis / 2;
         }
@@ -403,11 +422,11 @@ public class BreathingActivity extends AppCompatActivity {
     }
 
     private void lockSpinners() {
-        Spinner timerSpinner = (Spinner) findViewById(R.id.timerSpinner);
-        Spinner inhaleSpinner = (Spinner) findViewById(R.id.inhaleSpinner);
-        Spinner exhaleSpinner = (Spinner) findViewById(R.id.exhaleSpinner);
-        Spinner hold1_Spinner = (Spinner) findViewById(R.id.holdSpinner);
-        Spinner hold2_Spinner = (Spinner) findViewById(R.id.holdSpinner2);
+        Spinner timerSpinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.timerSpinner);
+        Spinner inhaleSpinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.inhaleSpinner);
+        Spinner exhaleSpinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.exhaleSpinner);
+        Spinner hold1_Spinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.holdSpinner);
+        Spinner hold2_Spinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.holdSpinner2);
 
         timerSpinner.setEnabled(false);
         inhaleSpinner.setEnabled(false);
@@ -417,11 +436,11 @@ public class BreathingActivity extends AppCompatActivity {
     }
 
     private void unlockSpinners() {
-        Spinner timerSpinner = (Spinner) findViewById(R.id.timerSpinner);
-        Spinner inhaleSpinner = (Spinner) findViewById(R.id.inhaleSpinner);
-        Spinner exhaleSpinner = (Spinner) findViewById(R.id.exhaleSpinner);
-        Spinner hold1_Spinner = (Spinner) findViewById(R.id.holdSpinner);
-        Spinner hold2_Spinner = (Spinner) findViewById(R.id.holdSpinner2);
+        Spinner timerSpinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.timerSpinner);
+        Spinner inhaleSpinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.inhaleSpinner);
+        Spinner exhaleSpinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.exhaleSpinner);
+        Spinner hold1_Spinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.holdSpinner);
+        Spinner hold2_Spinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.holdSpinner2);
 
         timerSpinner.setEnabled(true);
         inhaleSpinner.setEnabled(true);
@@ -431,11 +450,11 @@ public class BreathingActivity extends AppCompatActivity {
     }
 
     private void saveSpinnerData() {
-        Spinner timerSpinner = (Spinner) findViewById(R.id.timerSpinner);
-        Spinner inhaleSpinner = (Spinner) findViewById(R.id.inhaleSpinner);
-        Spinner exhaleSpinner = (Spinner) findViewById(R.id.exhaleSpinner);
-        Spinner hold1_Spinner = (Spinner) findViewById(R.id.holdSpinner);
-        Spinner hold2_Spinner = (Spinner) findViewById(R.id.holdSpinner2);
+        Spinner timerSpinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.timerSpinner);
+        Spinner inhaleSpinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.inhaleSpinner);
+        Spinner exhaleSpinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.exhaleSpinner);
+        Spinner hold1_Spinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.holdSpinner);
+        Spinner hold2_Spinner = (Spinner) findViewById(com.sfu.research.breathingaction.R.id.holdSpinner2);
 
         SharedPreferences.Editor editor = prefs.edit();
         editor.clear();
@@ -470,7 +489,6 @@ public class BreathingActivity extends AppCompatActivity {
         myRef.child(userName).child(dateString).child(timeString).child("hold 1").setValue(hold1);
         myRef.child(userName).child(dateString).child(timeString).child("exhale").setValue(exhale);
         myRef.child(userName).child(dateString).child(timeString).child("hold 2").setValue(hold2);
-//        myRef.child(userName).push().setValue(dateString);
     }
 
 
@@ -514,7 +532,7 @@ public class BreathingActivity extends AppCompatActivity {
         defaultPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         soundEnabled = defaultPrefs.getBoolean(PREFERENCE_KEY_SOUND_SWITCH, false);
         vibrationEnabled = defaultPrefs.getBoolean(PREFERENCE_KEY_VIBRATION_SWITCH, false);
-        userName = defaultPrefs.getString(PREFERENCE_KEY_USER_NAME, "def");
+        userName = defaultPrefs.getString(PREFERENCE_KEY_USER_NAME, "default");
         Log.i("Call", "onresume: " + soundEnabled + " " + vibrationEnabled);
         super.onResume();
     }

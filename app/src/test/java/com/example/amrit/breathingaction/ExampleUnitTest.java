@@ -1,4 +1,4 @@
-package com.example.amrit.breathingaction;
+package com.sfu.research.breathingaction;
 
 import org.junit.Test;
 

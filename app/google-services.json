@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:325029142309:android:4f823795ce9b923f",
+        "mobilesdk_app_id": "1:325029142309:android:dcb803695372eca4",
         "android_client_info": {
-          "package_name": "com.example.amrit.breathingaction"
+          "package_name": "com.sfu.research.breathingaction"
         }
       },
       "oauth_client": [

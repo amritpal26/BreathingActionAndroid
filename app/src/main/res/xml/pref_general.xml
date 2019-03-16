@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditTextPreference
         android:capitalize="words"
@@ -11,13 +12,13 @@
         android:title="@string/pref_title_user_name" />
 
     <SwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="pref_sound"
         android:summary="@string/pref_description_sound"
         android:title="@string/pref_title_sound" />
 
     <SwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="pref_vibration"
         android:summary="@string/pref_description_vibration"
         android:title="@string/pref_title_vibration" />
