@@ -475,7 +475,7 @@ public class BreathingActivity extends AppCompatActivity {
     private void sendTimeStampToDataBase(){
         DatabaseReference myRef = database.getReference("users");
         Date date = new Date();
-        SimpleDateFormat dateF = new SimpleDateFormat("EE MMM dd, yyyy");
+        SimpleDateFormat dateF = new SimpleDateFormat("MMM dd, yyyy (EE)");
         SimpleDateFormat timeF = new SimpleDateFormat("hh:mm:ss a");
         String inhale = ((double) inhaleTimeMillis / 1000) + "";
         String hold1 = ((double) hold_1_TimeMillis / 1000) + "";

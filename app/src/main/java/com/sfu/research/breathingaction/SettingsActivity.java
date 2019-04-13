@@ -231,7 +231,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             this.onBackPressed();
             return true;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     public static Intent makeIntent(Context context) {

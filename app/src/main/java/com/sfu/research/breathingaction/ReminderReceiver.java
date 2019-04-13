@@ -46,7 +46,7 @@ public class ReminderReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,intent, 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, App.CHANNEL_ID)
                 .setContentTitle("Reminder")
-                .setContentText("Remember to perform the breathing exercise.")
+                .setContentText("Time to do the relaxing exercise")
                 .setSmallIcon(com.sfu.research.breathingaction.R.drawable.ic_notifications_black_24dp)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
